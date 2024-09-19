@@ -1,23 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from 'react';
+import CardComponent from './CardComponent';
 
 function App() {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    // Replace this URL with your actual REST API
+    fetch('https://dummyjson.com/products')
+      .then((response) => response.json())
+      .then((data) => setData(data.products))
+      .catch((error) => console.error('Error fetching data:', error));
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container mt-5">
+      <div className="row">
+        {data.map((item) => (
+          <CardComponent
+            key={item.id}
+            image={item.thumbnail}
+            title={item.title}
+            description={item.description}
+          />
+        ))}
+      </div>
     </div>
   );
 }
